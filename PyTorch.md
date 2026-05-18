@@ -44,8 +44,9 @@ input_data = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]  # 构造一段长度为 6 的列表
 input_data = torch.tensor(input_data, dtype=torch.float32)  # 将列表转换为torch.tensor张量对象, 并设置数据类型为32位浮点数
 
 net.eval()  # 将模型设置为评估模式
-output = net(input_data)  # 进行前向传播, 模型会自动调用forward方法
-
-# output 即模型的输出
-print(len(list(output)))  # 在此长度应为 2, 即 2 维的向量   [y1, y2]
+with torch.no_grad():
+    output = net(input_data)  # 进行前向传播, 模型会自动调用forward方法
+    
+    # output 即模型的输出
+    print(len(list(output)))  # 在此长度应为 2, 即 2 维的向量   [y1, y2]
 ```
