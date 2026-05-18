@@ -89,8 +89,8 @@ for epoch in range(500):  # 训练100轮
     net.train()  # 设置为训练模式
     for value, labels in dataset:
         optimizer.zero_grad()  # 清零梯度
-        output = net(value)
-        loss = loss_fn(output, labels)
+        output = net(value)  # 前向传播
+        loss = loss_fn(output, labels)  # 计算损失
         loss.backward()  # 反向传播
         optimizer.step()  # 更新梯度
 
