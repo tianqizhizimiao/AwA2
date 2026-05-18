@@ -36,7 +36,7 @@ class Net(torch.nn.Module):  # 必须继承torch.nn.Module
 
 ## 3. 前向传播
 ```python
-# 初始化刚刚定义的模型
+# 初始化刚刚定义的结构
 net = Net()
 
 # 初始化一段数据进行输入
