@@ -19,14 +19,14 @@ class Net(torch.nn.Module):  # 必须继承torch.nn.Module
         super(Net, self).__init__()
 
         # 在这里定义网络结构
-        self.fc1 = torch.nn.Linear(400, 100)  # 定义一个全连接层, 400输入100输出
+        self.fc1 = torch.nn.Linear(6, 4)  # 定义一个全连接层, 6输入4输出
         self.r1 = torch.nn.ReLU()             # 定义一个激活函数
-        self.fc2 = torch.nn.Linear(100, 20)   # 定义一个全连接层, 100输入20输出
+        self.fc2 = torch.nn.Linear(4, 2)   # 定义一个全连接层, 4输入2输出
 
     def forward(self, x):  # 前向传播 此函数必须定义
         """
-        输入：torch.Tensor，形状应为 (batch_size, 400)
-        输出：torch.Tensor，形状应为 (batch_size, 20)
+        输入：torch.Tensor，形状应为 (batch_size, 6)
+        输出：torch.Tensor，形状应为 (batch_size, 2)
         """
         y = self.fc1(x)
         x = self.r1(y)
@@ -40,12 +40,12 @@ class Net(torch.nn.Module):  # 必须继承torch.nn.Module
 net = Net()
 
 # 初始化一段数据进行输入
-input_data = [0.0 for n in range(400)]  # 构造一段长度为 400 的列表 即 400维的向量
+input_data = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]  # 构造一段长度为 6 的列表 即 6维的向量
 input_data = torch.tensor(input_data, dtype=torch.float32)  # 将列表转换为torch.tensor张量对象, 并设置数据类型为32位浮点数
 
 net.eval()  # 将模型设置为评估模式
 output = net(input_data)  # 进行前向传播, 模型会自动调用forward方法
 
 # output 即模型的输出
-print(len(list(output)))  # 在此长度应为 20, 即 20 维的向量 
+print(len(list(output)))  # 在此长度应为 2, 即 2 维的向量   [y1, y2]
 ```
