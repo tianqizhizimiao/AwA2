@@ -41,7 +41,7 @@ net = Net()
 
 # 初始化一段数据进行输入
 input_data = [0.0 for n in range(400)]  # 构造一段长度为 400 的列表 即 400维的向量
-input_data = torch.tensor(input_data, dtype=torch.float32)  # 将列表转换为torch.tensor张量对象
+input_data = torch.tensor(input_data, dtype=torch.float32)  # 将列表转换为torch.tensor张量对象, 并设置数据类型为32位浮点数
 
 net.eval()  # 将模型设置为评估模式
 output = net(input_data)  # 进行前向传播, 模型会自动调用forward方法
