@@ -50,3 +50,58 @@ with torch.no_grad():
     # output 即模型的输出
     print(len(list(output)))  # 在此长度应为 2, 即 2 维的向量   [y1, y2]
 ```
+
+## 4. 训练
+```python
+net = Net()  # 初始化模型
+
+"""
+定义一个训练目标
+让模型学会根据输入结构输出对应的输出
+1. 当输入为 [1.0, 1.0, 1.0, 0.0, 0.0, 0.0] 时 输出 [0.0, 1.0]
+2. 当输入为 [0.0, 0.0, 0.0, 1.0, 1.0, 1.0] 时 输出 [1.0, 0.0]
+3. 当输入为 [0.0, 1.0, 1.0, 1.0, 1.0, 0.0] 时 输出 [0.5, 0.5]
+"""
+
+# 定义训练数据
+train_data = [
+    [[1.0, 1.0, 1.0, 0.0, 0.0, 0.0], [0.0, 1.0]],
+    [[0.0, 0.0, 0.0, 1.0, 1.0, 1.0], [1.0, 0.0]],
+    [[0.0, 1.0, 1.0, 1.0, 1.0, 0.0], [0.5, 0.5]],
+]
+
+class Dataset(torch.utils.data.Dataset):  # 数据集对象
+    def __init__(self, data):
+        self.data = data
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        return (torch.tensor(self.data[idx][0], dtype=torch.float32),
+                torch.tensor(self.data[idx][1], dtype=torch.float32))
+
+loss_fn = torch.nn.MSELoss()  # 初始化损失函数
+optimizer = torch.optim.Adam(net.parameters(), lr=0.01)  # 初始化优化器, 步长设置为0.01
+dataset = Dataset(train_data)
+
+for epoch in range(500):  # 训练100轮
+    net.train()  # 设置为训练模式
+    for value, labels in dataset:
+        optimizer.zero_grad()  # 清零梯度
+        output = net(value)
+        loss = loss_fn(output, labels)
+        loss.backward()  # 反向传播
+        optimizer.step()  # 更新梯度
+
+
+# 进行验证
+
+net.eval()  # 设置为评估模式
+with torch.no_grad():
+    input_data = torch.tensor(
+        [0.0, 1.0, 1.0, 1.0, 1.0, 0.0], dtype=torch.float32
+    )
+    output = net(input_data)
+    print(list(output))  # 输出应接近 [0.5, 0.5]
+```
